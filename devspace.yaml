@@ -1,0 +1,170 @@
+version: v1beta9
+images:
+  app:
+    image: gcr.io/title-block-ai/frontend
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    appendDockerfileInstructions:
+      - USER root
+
+deployments:
+  - name: frontend
+    namespace: "intelme-apps"
+    helm:
+      componentChart: true
+      values:
+        containers:
+          - env:
+              - name: CI
+                value: "true"
+              - name: PUBLIC_URL
+                value: /
+              - name: REACT_APP_PATH
+                value: /
+              - name: REACT_APP_PREFIX
+                value: prod
+              - name: REACT_APP_URL
+                value: /
+
+            image: gcr.io/title-block-ai/frontend
+        service:
+          ports:
+            - port: 3000
+        ingress:
+          ingressClass: kong
+          tls: false
+          rules:
+            - path: /
+          annotations:
+            kubernetes.io/ingress.class: kong
+
+dev:
+  ports:
+    - imageName: app
+      forward:
+        - port: 3000
+  open:
+    - url: http://localhost:3000
+  sync:
+    - imageName: app
+      excludePaths:
+        - .git/
+      uploadExcludePaths:
+        - Dockerfile
+        - node_modules/
+        - devspace.yaml
+      onUpload:
+        restartContainer: true
+
+profiles:
+  - name: production
+    patches:
+      - op: remove
+        path: images.app.injectRestartHelper
+      - op: remove
+        path: images.app.appendDockerfileInstructions
+  - name: debugging
+    patches:
+      - op: add
+        path: dev.interactive
+        value:
+          defaultEnabled: true
+      - op: add
+        path: images.app.entrypoint
+        value:
+          - sleep
+          - 9999999
+  - name: development
+    patches:
+      - op: replace
+        path: deployments.name=frontend
+        value:
+          name: frontend-dev
+          namespace: "intelme-apps"
+          helm:
+            componentChart: true
+            values:
+              containers:
+                - env:
+                    - name: CI
+                      value: "true"
+                    - name: PUBLIC_URL
+                      value: /frontend-dev
+                    - name: REACT_APP_PATH
+                      value: /frontend-dev
+                    - name: REACT_APP_PREFIX
+                      value: dev
+                    - name: REACT_APP_URL
+                      value: /frontend-dev/
+
+                  image: gcr.io/title-block-ai/frontend
+              service:
+                ports:
+                  - port: 3000
+              ingress:
+                ingressClass: kong
+                tls: false
+                rules:
+                  - path: /frontend-dev
+                annotations:
+                  kubernetes.io/ingress.class: kong
+  - name: frontend-dev
+    replace:
+      images:
+        app:
+          image: gcr.io/title-block-ai/frontend-dev
+          preferSyncOverRebuild: true
+          injectRestartHelper: true
+          appendDockerfileInstructions:
+            - USER root
+      dev:
+        ports:
+          - imageName: frontend-dev
+            forward:
+              - port: 3000
+        open:
+          - url: http://localhost:3000
+        sync:
+          - imageName: frontend-dev
+            excludePaths:
+              - .git/
+            uploadExcludePaths:
+              - Dockerfile
+              - node_modules/
+              - devspace.yaml
+            onUpload:
+              restartContainer: true
+
+    patches:
+      - op: replace
+        path: deployments.name=frontend
+        value:
+          name: frontend-dev
+          namespace: "intelme-apps"
+          helm:
+            componentChart: true
+            values:
+              containers:
+                - env:
+                    - name: CI
+                      value: "true"
+                    - name: PUBLIC_URL
+                      value: /frontend-dev
+                    - name: REACT_APP_PATH
+                      value: /frontend-dev
+                    - name: REACT_APP_PREFIX
+                      value: frontend-dev
+                    - name: REACT_APP_URL
+                      value: /frontend-dev/
+
+                  image: gcr.io/title-block-ai/frontend-dev
+              service:
+                ports:
+                  - port: 3000
+              ingress:
+                ingressClass: kong
+                tls: false
+                rules:
+                  - path: /frontend-dev
+                annotations:
+                  kubernetes.io/ingress.class: kong

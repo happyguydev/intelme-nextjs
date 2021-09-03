@@ -1,0 +1,120 @@
+import { makeStyles } from '@material-ui/core';
+
+const cardProfileStyles = makeStyles({
+  cardProfileContainer: {
+    fontFamily: 'Poppins',
+    minWidth: '352px',
+    width: '352px',
+    textAlign: 'center',
+    letterSpacing: '-0.2px',
+    '& > div': {
+      boxShadow: '0px 4px 20px rgb(0 0 0 / 5%)',
+    },
+  },
+  userImage: {
+    margin: '16px 0',
+    fontWeight: '600',
+  },
+  userName: {
+    fontFamily: 'Montserrat',
+    fontWeight: '500',
+    fontSize: '20px',
+    lineHeight: '24px',
+    marginBottom: '8px',
+  },
+  userCompany: {
+    fontWeight: '300',
+    fontSize: '16px',
+    lineHeight: '16px',
+    marginBottom: '24px',
+  },
+  userEmail: {
+    fontWeight: '400',
+    fontSize: '12px',
+    lineHeight: '16px',
+    marginBottom: '64px',
+  },
+  connectedAccountsTitle: {
+    fontWeight: '400',
+    fontSize: '16px',
+    lineHeight: '16px',
+    color: '#4D4D4D',
+    textAlign: 'left',
+    margin: '16px 0',
+  },
+  accountList: {
+    marginBottom: '96px',
+  },
+  accountItem: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: '16px',
+  },
+  accountName: {
+    fontWeight: '400',
+    fontSize: '12px',
+    lineHeight: '16px',
+    flex: '0 0 101px',
+    marginLeft: '32px',
+  },
+  accountConnectedBadge: {
+    width: '71px',
+    height: '20px',
+    backgroundColor: '#FF8A47',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: '74px',
+    marginRight: '-6px',
+    '& > span': {
+      fontWeight: '500',
+      fontSize: '10px',
+      lineHeight: '16px',
+      color: '#fff',
+    },
+  },
+  accountUnconnectedBadge: {
+    width: '58px',
+    height: '20px',
+    backgroundColor: '#FFF0E8',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: '214px',
+    '& > span': {
+      fontWeight: '500',
+      fontSize: '10px',
+      lineHeight: '16px',
+      color: '#FF8A47',
+    },
+  },
+  projectItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: '12px',
+  },
+  projectStatusTitle: {
+    fontWeight: '400',
+    fontSize: '12px',
+    lineHeight: '16px',
+  },
+  projectValue: {
+    fontWeight: '500',
+    fontSize: '12px',
+    lineHeight: '16px',
+    width: '44px',
+    height: '20px',
+    borderRadius: '20px',
+    padding: '2px',
+    backgroundColor: '#EDF5F6',
+    color: '#089BAB',
+  },
+});
+
+export default cardProfileStyles;
